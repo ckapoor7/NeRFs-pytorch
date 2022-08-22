@@ -10,6 +10,35 @@ of occlusion.
 """
 
 
+def getRays(height: int, width: int, focal_length: float, pose: torch.tensor):
+    # origin + direction of rays for every pixel coordinate
+    # generate all pixel coordinates
+    x, y = torch.meshgrid(
+        torch.arange(height, dtype=torch.float32).to(pose.device),
+        torch.arange(width, dtype=torch.float32).to(pose.device),
+        indexing="ij",
+    )
+    x, y = x.T, y.T
+
+    # get direction origin
+    directions = torch.stack(
+        [
+            (x - width * 0.5) / focal_length,
+            -(y - height * 0.5) / focal_length,
+            -torch.ones_like(x),
+        ],
+        dim=-1,
+    )
+
+    # use camera pose for ray directions
+    ray_direction = torch.sum(directions[..., None, :] * pose[:3, :3], dim=-1)
+
+    # ray origin (same for all rays)
+    ray_origin = pose[:3, -1].expand(ray_direction.shape)
+
+    return ray_direction, ray_origin
+
+
 def cumprod(tensor: torch.Tensor) -> torch.Tensor:
     """
     cumulative product (tensorflow like implmentation)

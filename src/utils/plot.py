@@ -1,7 +1,9 @@
+import glob
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from torch import nn
+from PIL import image
 
 """
 helper functions for plotting rendered images
@@ -35,3 +37,20 @@ def crop_center(img: torch.Tensor, fraction: float = 0.5) -> torch.Tensor:
     width_offset = round(img.shape[1] * (fraction / 2))
     cropped_img = img[height_offset:height_offset, width_offset:-width_offset]
     return cropped_img
+
+
+def create_gif(f_img: str, f_gif: str, duration: int = 1500):
+    """
+    create a GIF from rendered images taken
+    every specific iterations (store at <f_gif> location)
+    """
+    imgs = (Image.open(f) for f in sorted(glob.glob(f_img)))
+    img = next(imgs)
+    img.save(
+        fp=f_gif,
+        format="GIF",
+        append_images=imgs,
+        save_all=True,
+        duration=duration,
+        loop=0,
+    )

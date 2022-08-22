@@ -7,12 +7,12 @@ class PositionalEncoder(nn.Module):
     fourier encoding of input points
     """
 
-    def __init__(self, discrete_input: int, num_freq: int, log_space: bool = False):
+    def __init__(self, input_dims: int, num_freq: int, log_space: bool = False):
         super().__init__()
-        self.discrete_input = discrete_input
+        self.input_dims = input_dims
         self.num_freq = num_freq
         self.log_space = log_space
-        self.discrete_output = discrete_input * (1 + 2 * self.num_freq)
+        self.output_dims = input_dims * (1 + 2 * self.num_freq)
         self.embedding_func = [lambda x: x]
 
         # frequency band in log and linear space

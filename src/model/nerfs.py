@@ -5,45 +5,41 @@ from torch import nn
 class Nerf(nn.Module):
     def __init__(
         self,
-        discrete_input: int = 3,
+        input_dims: int = 3,
         num_layers: int = 8,
-        discrete_filter: int = 256,
+        filter_dims: int = 256,
         skip=(4,),
-        discrete_viewdirs: int = None,
+        viewdirs_dims: int = None,
     ):
         super().__init__
-        self.discrete_input = discrete_input
+        self.input_dims = input_dims
         self.skip = skip
         self.activation = nn.functional.relu
-        self.discrete_viewdirs = discrete_viewdirs
+        self.viewdirs_dims = viewdirs_dims
 
         # model layers
         self.layers = nn.ModuleList(
-            [nn.Linear(self.discrete_input, self.discrete_filter)]
+            [nn.Linear(self.input_dims, self.filter_dims)]
             + [
-                nn.Linear(
-                    self.discrete_filter + self.discrete_input, self.discrete_filter
-                )
+                nn.Linear(self.filter_dims + self.input_dims, self.filter_dims)
                 if i in skip
-                else nn.Linear(self.discrete_filter, self.discrete_filter)
+                else nn.Linear(self.filter_dims, self.filter_dims)
                 for i in range(num_layers - 1)
             ]
         )
 
         # bottleneck
-        if self.discrete_viewdirs is not None:
+        if self.viewdirs_dims is not None:
             # split into alpha + RGB channels
-            self.alpha = nn.Linear(discrete_filter, 1)
-            self.rgb = nn.Linear(discrete_filter, discrete_filter)
-            self.branch = nn.Linear(
-                discrete_filter + self.discrete_viewdirs, discrete_filter // 2
-            )
-            self.output = nn.Linear(discrete_filter // 2, 3)
+            self.alpha = nn.Linear(filter_dims, 1)
+            self.rgb = nn.Linear(filter_dims, filter_dims)
+            self.branch = nn.Linear(filter_dims + self.viewdirs_dims, filter_dims // 2)
+            self.output = nn.Linear(filter_dims // 2, 3)
         else:
-            self.output = nn.Linear(discrete_filter, 4)
+            self.output = nn.Linear(filter_dims, 4)
 
     def forward(self, x: torch.Tensor, viewdirs: torch.Tensor = None):
-        if self.discrete_viewdirs is not None and viewdirs is None:
+        if self.viewdirs_dims is not None and viewdirs is None:
             raise ValueError("ambiguity in view direction")
 
         # forward pass till the bottleneck layer
@@ -54,7 +50,7 @@ class Nerf(nn.Module):
                 x = torch.cat([x, x_input], dim=-1)
 
         # bottleneck layer
-        if self.discrete_viewdirs is not None:
+        if self.viewdirs_dims is not None:
             alpha_filter = self.alpha(x)
             # get RGB
             x = self.rgb(x)

@@ -48,6 +48,8 @@ _C.TRAINING = CN()
 # training params
 _C.TRAINING.DATASET = "/path/to/dataset"
 _C.TRAINING.SAVE_PATH = "/path/to/save"
+_C.TRAINING.SAVE_GIF = False
+_C.TRAINING.GIF_PATH = "/path/to/gif"
 _C.TRAINING.NUM_ITERS = 10000
 _C.TRAINING.BATCH_SIZE = 2**14
 _C.TRAINING.BATCHING_DISABLE = True

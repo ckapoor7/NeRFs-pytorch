@@ -1,3 +1,4 @@
+import os
 import torch
 import json
 from torch import nn
@@ -5,6 +6,7 @@ from .dataset import Dataset
 from model.nerfs import Nerf
 from train.train import train
 from yacs.config import CfgNode
+from utils.plot import create_gif
 from config.utils import load_cfg
 from model.encoding import PositionalEncoder
 
@@ -87,3 +89,9 @@ def main():
     if train_status:
         print(f"Training over")
         break
+    if cfg.TRAINING.SAVE_GIF:
+        print(f"Saving GIF to: {cfg.TRAINING.SAVE_PATH}")
+        create_gif(
+            f_img=os.path.join(cfg.TRAINING.SAVE_PATH, "*.png"),
+            f_gif=cfg.TRAINING.GIF_PATH,
+        )

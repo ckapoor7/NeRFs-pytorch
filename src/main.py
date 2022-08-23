@@ -95,3 +95,7 @@ def main():
             f_img=os.path.join(cfg.TRAINING.SAVE_PATH, "*.png"),
             f_gif=cfg.TRAINING.GIF_PATH,
         )
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,61 @@
+#+title: NeRFs for View Synthesis
+
+* Overview
+NeRFs have slowly become the de facto backbone in problems concerning view synthesis and rendering from a sparse set of 2D locations. There has since been many different renditions which address the aspects of speed, lighting, dynamic scenes etc. among others.
+
+Here, I have made an attempt to write a very small (2 layer MLP) version of the NeRF on the dataset ([[http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/ECCV20/nerf/tiny_nerf_data.npz][here]]).
+
+I have trained the model from scratch on a *NVIDIA GeForce GTX 1080 Ti* for 10k iterations. This takes about 50 minutes for completion.
+
+** Usage
+Clone the repository on your system:
+#+begin_src bash
+    git clone https://github.com/ckapoor7/NeRFs-pytorch
+#+end_src
+Go to the source code directory:
+#+begin_src bash
+    cd src/
+#+end_src
+Run the file ~main.py~
+#+begin_src bash
+    python3 main.py
+#+end_src
+
+** Configuration
+I have tried to make the configuration as flexible as possible by making use of the YACS (*Y*et *A*nother *C*onfiguration *S*ystem) module. The default parameters (which I have used) are specified in the file ~config/default.py~.
+
+To tweak those, one can either directly change the source code (not the best idea) or edit variables by /defrosting/ the configuration before passing it to the main function. The boilerplate code for this looks like so:
+
+#+begin_src python
+    # load and defrost
+    from config.utils import load_cfg
+    cfg = load_cfg()
+    cfg.defrost()
+    # edit some parameters
+    cfg.OPTIMIZER.LR = 1e-4
+    cfg.TRAINING.NUM_ITERS = 50000
+    # freeze this configuration
+    cfg.freeze()
+#+end_src
+
+This new /frozen/ configuration can now be passed to the model to run the training and inference parts.
+
+** Results
+Some intermediate results at iterations *0*, *725* and *9975*
+[[./results/iter-0.png]]
+[[./results/iter-725.png]]
+[[./results/iter-9975.png]]
+
+I have also compiled a small GIF of the transitions from the 0th iteration up until the last one.
+[[./results/evolution.gif]]
+
+Admittedly, the results up close are not that impressive which I reason to be due to the small size of the model as well as the low resolution of the dataset.
+* References
+#+begin_src latex
+    @inproceedings{mildenhall2020nerf,
+ title={NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis},
+ author={Ben Mildenhall and Pratul P. Srinivasan and Matthew Tancik and Jonathan T. Barron and Ravi Ramamoorthi and Ren Ng},
+ year={2020},
+ booktitle={ECCV},
+}
+#+end_src

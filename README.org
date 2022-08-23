@@ -47,11 +47,12 @@ Some intermediate results at iterations *0*, *725* and *9975*
 [[./results/iter-9975.png]]
 
 I have also compiled a small GIF of the transitions from the 0th iteration up until the last one.
+
 [[./results/evolution.gif]]
 
 Admittedly, the results up close are not that impressive which I reason to be due to the small size of the model as well as the low resolution of the dataset.
 * References
-#+begin_src latex
+#+begin_src bibtex
     @inproceedings{mildenhall2020nerf,
  title={NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis},
  author={Ben Mildenhall and Pratul P. Srinivasan and Matthew Tancik and Jonathan T. Barron and Ravi Ramamoorthi and Ren Ng},

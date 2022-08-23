@@ -47,9 +47,9 @@ Some intermediate results at iterations *0*, *725* and *9975*. I have also made 
 [[./results/iter-725.png]]
 [[./results/iter-9975.png]]
 
-I have also compiled a small GIF of the transitions from the 0th iteration up until the last one.
+I have also compiled a small =mp4= movie of the transitions from the 0th iteration up until the last one.
 
-[[./results/evolution.mp4]]
+[[./results/evolution.gif]]
 
 Admittedly, the results up close are not that impressive which I reason to be due to the small size of the model as well as the low resolution of the dataset.
 * References

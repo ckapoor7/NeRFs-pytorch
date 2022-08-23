@@ -3,12 +3,11 @@ import torch
 import numpy as np
 from torch import nn
 from skimage import imsave
-
-# from something import nerf_forward
-from ..utils.plot import crop_center, plot_samples
 from ..dataset import Dataset
-from ..utils.rendering_utils import getRays
 from yacs.config import CfgNode
+from .nerf_forward import nerf_forward
+from ..utils.rendering_utils import getRays
+from ..utils.plot import crop_center, plot_samples
 
 
 def create_kwargs(cfg: CfgNode):
@@ -98,10 +97,11 @@ def train(testimg, testpose, cfg: CfgNode, save_img: bool = False):
         fine_model=fine_model,
         viewdirs_encoding_function=encode_viewdirs,
         chunksize=cfg.TRANING.CHUNK_SIZE,
+        cfg=cfg,
     )
 
     # backpropagtion
-    rgb_predicted = outputs["rgb_map"]
+    rgb_predicted = outputs["rgb_mesh"]
     loss = torch.nn.functional.mse_loss(rgb_predicted, target_img)
     loss.backward()
     optimizer.step()
@@ -133,9 +133,10 @@ def train(testimg, testpose, cfg: CfgNode, save_img: bool = False):
             fine_model=fine_model,
             viewdirs_encoding_function=encode_viewdirs,
             chunksize=cfg.TRANING.CHUNK_SIZE,
+            cfg=cfg,
         )
 
-        rgb_predicted = outputs["rgb_map"]
+        rgb_predicted = outputs["rgb_mesh"]
         # save for gif
         if save_img:
             res_img = rgb_predicted.reshape([height, width, 3].cpu().detach().numpy())

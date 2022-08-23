@@ -41,7 +41,8 @@ To tweak those, one can either directly change the source code (not the best ide
 This new /frozen/ configuration can now be passed to the model to run the training and inference parts.
 
 ** Results
-Some intermediate results at iterations *0*, *725* and *9975*
+Some intermediate results at iterations *0*, *725* and *9975*. I have also made a subplot showing the effects of pixel sampling for both the stratified as well as the hierarchical case for better visualisation.
+
 [[./results/iter-0.png]]
 [[./results/iter-725.png]]
 [[./results/iter-9975.png]]

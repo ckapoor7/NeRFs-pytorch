@@ -9,11 +9,11 @@ _C.SYSTEM = CN()
 # encoder
 _C.ENCODERS = CN()
 # encoder params
-_C.ENCODERS.DIM_INPUT = 3  # d_input
-_C.ENCODERS.NUM_FREQS = 10  # n_freq
+_C.ENCODERS.DIM_INPUT = 3
+_C.ENCODERS.NUM_FREQS = 10
 _C.ENCODERS.LOG_SPACE = True
 _C.ENCODERS.USE_VIEWDIRS = True
-_C.ENCODERS.NUM_FREQS_DIRS = 4  # n_freqs_views
+_C.ENCODERS.NUM_FREQS_DIRS = 4
 
 # stratified sampling
 _C.STRAT_SAMPLING = CN()
@@ -55,14 +55,6 @@ _C.TRAINING.CHUNKSIZE = 2**14
 _C.TRAINING.CENTER_CROP = True
 _C.TRAINING.CENTER_CROP_ITERS = 50
 _C.TRAINING.DISPLAY_RATE = 25
-
-
-# early stopping
-_C.EARLY_STOPPING = CN()
-# early stopping params
-_C.EARLY_STOPPING.WARMUP_ITERS = 100
-_C.EARLY_STOPPING.MIN_FITNESS = 10  # min PSNR to continue training
-_C.EARLY_STOPPING.NUM_RESTARTS = 10
 
 
 def get_cfg_defaults():
